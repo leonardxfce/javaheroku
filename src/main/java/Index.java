@@ -1,46 +1,29 @@
-import com.github.mustachejava.DefaultMustacheFactory;
-import com.github.mustachejava.Mustache;
-import com.github.mustachejava.MustacheFactory;
+import com.google.gson.Gson;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.StringWriter;
 
 public class Index extends HttpServlet {
-    private static final long serialVersionUID = -4751096228274971485L;
-
     @Override
-    protected void doGet(HttpServletRequest reqest, HttpServletResponse response)
-            throws ServletException, IOException {
-        MustacheFactory mf = new DefaultMustacheFactory();
-        Mustache m = mf.compile("index.mustache");
-        StringWriter writer = new StringWriter();
-        Human h = new Human("leonardo","araoz");
-        m.execute(writer, h).flush();
-        String html = writer.toString();
-        response.setContentType("text/html;charset=UTF-8");
-        response.getWriter().println(html);
-    }
-
-    @Override
-    public void init() throws ServletException {
-        System.out.println("Servlet " + this.getServletName() + " has started");
-    }
-
-    @Override
-    public void destroy() {
-        System.out.println("Servlet " + this.getServletName() + " has stopped");
+    protected void doGet(HttpServletRequest reqest, HttpServletResponse response) throws IOException {
+        Human h = new Human("leonardo", "araoz");
+        Gson gson = new Gson();
+        String json = gson.toJson(h);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "GET");
+        response.getWriter().println(json);
     }
 }
 
-class Human{
-    String nombre;
-    String apellido;
+class Human {
+    private String nombre;
+    private String apellido;
 
-    public Human(String nombre, String apellido) {
+    Human(String nombre, String apellido) {
         this.nombre = nombre;
         this.apellido = apellido;
     }
