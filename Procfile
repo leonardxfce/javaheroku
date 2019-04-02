@@ -1,1 +1,1 @@
-web: java -jar target/uno-1.jar
+web: java -jar target/uno-1.war
